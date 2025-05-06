@@ -58,13 +58,15 @@ For a minimal setup, follow these steps:
 2.  **Configure Core Settings** (typically in your `AppDelegate`'s `application(_:didFinishLaunchingWithOptions:)` method or your `App` struct's `init()`):
     ```swift
     // In AppDelegate.swift or YourApp.swift
-    import PaywallKit // Ensure PaywallKit is imported
+    import PaywallKit 
 
     // ...
     PaywallConfig.paymentEngine = .storeKit2 // Or .revenueCat
     if PaywallConfig.paymentEngine == .revenueCat {
         PaywallConfig.revenueCatAPIKey = "YOUR_REVENUECAT_API_KEY" // Replace with your actual key
     }
+    
+    // Set the default paywall type (optional)
     PaywallConfig.paywallType = .full // Or .trial, .promo
     // ...
     ```
@@ -82,7 +84,11 @@ For a minimal setup, follow these steps:
                 shouldShowPaywall = true
             }
             .sheet(isPresented: $shouldShowPaywall) {
-                PaywallContainerView() // This view uses the static configurations from PaywallConfig
+                // Use default type from PaywallConfig.paywallType
+                PaywallContainerView()
+                
+                // Or specify a type directly
+                // PaywallContainerView(type: .promo)
             }
         }
     }
@@ -92,7 +98,7 @@ For more detailed configuration options, including customizing benefits, backgro
 
 ### Detailed Configuration and Usage
 
-The Quick Start Guide covers the essentials. Here’s a more in-depth look at each step and further customization options:
+The Quick Start Guide covers the essentials. Here's a more in-depth look at each step and further customization options:
 
 #### 1. Importing the Package
 As shown in the Quick Start, to make PaywallKit's functionality available in your Swift files, you need to import it:
