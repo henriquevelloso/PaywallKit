@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "PaywallKit",
+    defaultLocalization: "en",
     platforms: [
         .iOS(.v16)
     ],
@@ -31,5 +32,9 @@ let package = Package(
                 .process("Resources")
             ]
         ),
+        .testTarget(
+            name: "PaywallKitTests",
+            dependencies: ["PaywallKit"]
+        )
     ]
 )
