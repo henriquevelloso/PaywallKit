@@ -1,4 +1,3 @@
-
 //
 //  PurchaseManager.swift
 //  PaywallKit
@@ -18,23 +17,24 @@ public enum PurchaseResult {
 }
 
 /// Protocol defining the purchase actions available to PaywallKit views
+@MainActor
 public protocol PurchaseManagerProtocol: AnyObject {
     /// Load available products & current purchase states
-    func initialize(completion: @escaping (Result<Void, Error>) -> Void)
+    func initialize() async throws
     /// Begin purchase for product
-    func purchase(productID: ProductID, completion: @escaping (PurchaseResult) -> Void)
+    func purchase(productID: ProductID) async throws
     /// Restore purchases
-    func restore(completion: @escaping (PurchaseResult) -> Void)
+    func restore() async throws
     /// Check premium access [optional, e.g., for unlocking]
-    func hasAccess(productID: ProductID) -> Bool
+    func hasAccess(productID: ProductID) -> Bool // Este pode permanecer síncrono
 }
 
 /// Facade: Selects payment engine and forwards requests to the appropriate manager
 public final class PurchaseManager: PurchaseManagerProtocol {
     private var engine: PurchaseManagerProtocol
 
+    @MainActor
     public init() {
-        // Select payment engine based on config
         switch PaywallConfig.paymentEngine {
         case .storeKit2:
             self.engine = StoreKitPurchaseManager()
@@ -43,20 +43,19 @@ public final class PurchaseManager: PurchaseManagerProtocol {
         }
     }
 
-    public func initialize(completion: @escaping (Result<Void, Error>) -> Void) {
-        engine.initialize(completion: completion)
+    public func initialize() async throws {
+        try await engine.initialize()
     }
 
-    public func purchase(productID: ProductID, completion: @escaping (PurchaseResult) -> Void) {
-        engine.purchase(productID: productID, completion: completion)
+    public func purchase(productID: ProductID) async throws {
+        try await engine.purchase(productID: productID)
     }
 
-    public func restore(completion: @escaping (PurchaseResult) -> Void) {
-        engine.restore(completion: completion)
+    public func restore() async throws {
+        try await engine.restore()
     }
 
     public func hasAccess(productID: ProductID) -> Bool {
         engine.hasAccess(productID: productID)
     }
 }
-

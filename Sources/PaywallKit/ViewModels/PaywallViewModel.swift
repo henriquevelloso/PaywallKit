@@ -1,5 +1,3 @@
-
-
 //
 //  PaywallViewModel.swift
 //  PaywallKit
@@ -9,13 +7,8 @@
 
 import Foundation
 import SwiftUI
-
-#if canImport(StoreKit)
-import StoreKit
-#endif
-#if canImport(RevenueCat)
-import RevenueCat
-#endif
+import StoreKit // Para SKError e Product (StoreKit)
+import RevenueCat // Agora importado diretamente
 
 @MainActor
 public class PaywallViewModel: ObservableObject {
@@ -56,55 +49,50 @@ public class PaywallViewModel: ObservableObject {
 
     public init(purchaseManager: PurchaseManagerProtocol? = nil) {
         self.purchaseManager = purchaseManager ?? PurchaseManager()
-        Task { await self.loadProducts() }
+        Task {
+            // isLoadingInitial e errorMessage são atualizados dentro de loadProducts
+            await self.loadProducts()
+        }
     }
 
     // MARK: - Load Products
-
-    /// Load products from the engine, populating either storeKitProducts or revenueCatPackages
     public func loadProducts() async {
         errorMessage = nil
         isLoadingInitial = true
         defer { isLoadingInitial = false }
-        await withCheckedContinuation { continuation in
-            purchaseManager.initialize { [weak self] result in
-                guard let self else {
-                    continuation.resume()
-                    return
-                }
-                switch result {
-                case .success():
-                    self.populateProductsFromEngine()
-                    self.loadedProductIDs = Set(self._allLoadedProductIDs())
-                case .failure(let error):
-                    self.errorMessage = error.localizedDescription
-                    self.hasError = true
-                }
-                continuation.resume()
-            }
+        
+        do {
+            // CORREÇÃO: Chamar o método async throws diretamente
+            try await purchaseManager.initialize()
+            self.populateProductsFromEngine() // Esta função deve ser síncrona e usar os dados já carregados pelo manager
+            self.loadedProductIDs = Set(self._allLoadedProductIDs())
+        } catch {
+            self.errorMessage = error.localizedDescription
+            self.hasError = true
         }
     }
 
     /// Called after successful engine initialize to fetch products into dictionary
+    @MainActor // Garantir que está no MainActor para acessar PaywallConfig
     private func populateProductsFromEngine() {
+        // Acesso a PaywallConfig.paymentEngine é @MainActor
         switch PaywallConfig.paymentEngine {
         case .storeKit2:
-            #if canImport(StoreKit)
             if let manager = purchaseManager as? StoreKitPurchaseManager {
-                self.storeKitProducts = manager.products
+                self.storeKitProducts = manager.products // Assumindo que products em StoreKitPurchaseManager é acessível
             }
-            #endif
         case .revenueCat:
-            #if canImport(RevenueCat)
             if let manager = purchaseManager as? RevenueCatPurchaseManager {
+                // CORREÇÃO: Acessar 'products' que deve ser public(set) ou similar
                 self.revenueCatPackages = manager.products
             }
-            #endif
         }
     }
 
     /// Returns all currently loaded ProductIDs for display purposes
+    @MainActor
     private func _allLoadedProductIDs() -> [ProductID] {
+        // Acesso a PaywallConfig.paymentEngine é @MainActor
         switch PaywallConfig.paymentEngine {
         case .storeKit2:
             return Array(storeKitProducts.keys)
@@ -114,76 +102,69 @@ public class PaywallViewModel: ObservableObject {
     }
 
     // MARK: - UI Text Builders
-
-    /// Returns the composed StoreKit or RevenueCat title + price for the provided productID. (Never hardcoded)
+    @MainActor // Garantir que está no MainActor para acessar PaywallConfig e published properties
     public func title(for productId: ProductID) -> String {
+        // Acesso a PaywallConfig.paymentEngine é @MainActor
         switch PaywallConfig.paymentEngine {
         case .storeKit2:
-            #if canImport(StoreKit)
             guard let product = storeKitProducts[productId] else { return "" }
             return "\(product.displayName) • \(product.displayPrice)"
-            #else
-            return ""
-            #endif
         case .revenueCat:
-            #if canImport(RevenueCat)
             guard let pkg = revenueCatPackages[productId] else { return "" }
-            return "\(pkg.product.localizedTitle) • \(pkg.product.localizedPriceString)"
-            #else
-            return ""
-            #endif
+            // CORREÇÃO: RevenueCat's StoreProduct tem localizedPriceString
+            // e localizedTitle. pkg.product é o SKProduct legado.
+            // Usar pkg.storeProduct para informações mais recentes.
+            let title = pkg.storeProduct.localizedTitle
+            let price = pkg.storeProduct.localizedPriceString
+            return "\(title) • \(price)"
         }
     }
 
     // MARK: - Purchase/Redeem Actions
-
-    /// Start purchase flow for product
     public func purchase(_ productId: ProductID) {
         guard !isPurchasing else { return }
-        selectedProductId = productId
-        isPurchasing = true
-        errorMessage = nil
-
-        purchaseManager.purchase(productID: productId) { [weak self] result in
-            guard let self = self else { return }
-            self.isPurchasing = false
-            self.selectedProductId = nil
-            switch result {
-            case .success:
-                // Purchased – optionally handle events or success popups here
-                break
-            case .restored:
-                // Possibly show a toast or notification
-                break
-            case .userCancelled:
-                // Do nothing for user cancellation
-                break
-            case .failed(let error):
+        
+        Task { @MainActor in // Garantir que atualizações de UI aconteçam no MainActor
+            selectedProductId = productId
+            isPurchasing = true
+            errorMessage = nil
+            
+            do {
+                // CORREÇÃO: Chamar o método async throws diretamente
+                try await purchaseManager.purchase(productID: productId)
+                // Sucesso na compra - opcionalmente mostrar mensagem/navegar
+            } catch let error as NSError {
+                if error.domain == SKErrorDomain && error.code == SKError.Code.paymentCancelled.rawValue {
+                    // Usuário cancelou, geralmente não mostramos erro
+                } else {
+                    self.errorMessage = error.localizedDescription
+                    self.hasError = true
+                }
+            } catch { // Outros erros
                 self.errorMessage = error.localizedDescription
                 self.hasError = true
             }
+            
+            self.isPurchasing = false
+            self.selectedProductId = nil
         }
     }
 
-    /// Restore any previously purchased products
     public func restorePurchases() {
-        isPurchasing = true
-        errorMessage = nil
-        purchaseManager.restore { [weak self] result in
-            guard let self = self else { return }
-            self.isPurchasing = false
-            switch result {
-            case .success, .restored:
-                // User's purchases have been restored
-                break
-            case .failed(let error):
+        Task { @MainActor in // Garantir que atualizações de UI aconteçam no MainActor
+            isPurchasing = true
+            errorMessage = nil
+            
+            do {
+                // CORREÇÃO: Chamar o método async throws diretamente
+                try await purchaseManager.restore()
+                // Sucesso na restauração - opcionalmente mostrar mensagem
+            } catch {
                 self.errorMessage = error.localizedDescription
                 self.hasError = true
-            case .userCancelled:
-                // Ignore
-                break
             }
+            
+            self.isPurchasing = false
         }
     }
 }
-

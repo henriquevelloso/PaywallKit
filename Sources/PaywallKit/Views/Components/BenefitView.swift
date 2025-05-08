@@ -22,10 +22,12 @@ public struct BenefitView: View {
                 .frame(width: 28, height: 28)
                 .foregroundColor(.accentColor)
             VStack(alignment: .leading, spacing: 4) {
-                Text(String(localized: benefit.title))
+                // CORREÇÃO: Passar a chave de localização diretamente
+                Text(benefit.title)
                     .bold()
                     .foregroundColor(.primary)
-                Text(String(localized: benefit.description))
+                // CORREÇÃO: Passar a chave de localização diretamente
+                Text(benefit.description)
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }

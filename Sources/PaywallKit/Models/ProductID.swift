@@ -1,4 +1,3 @@
-
 //
 //  ProductID.swift
 //  PaywallKit
@@ -9,7 +8,7 @@
 import Foundation
 
 /// Enum-based Product Identifiers for StoreKit/RevenueCat
-public enum ProductID: String, CaseIterable {
+public enum ProductID: String, CaseIterable, Sendable {
     case weekly
     case weeklyTrial
     case annual
