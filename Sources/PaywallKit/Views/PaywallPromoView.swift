@@ -50,7 +50,7 @@ public struct PaywallPromoView: View {
         }
         .background(Color(.systemBackground).ignoresSafeArea())
         .alert(isPresented: $viewModel.hasError) {
-            Alert(title: Text("Error"), message: Text(viewModel.errorMessage ?? ""), dismissButton: .default(Text("OK")))
+            Alert(title: Text("paywall_error_title"), message: Text(viewModel.errorMessage ?? ""), dismissButton: .default(Text("paywall_alert_dismiss")))
         }
         .overlay {
             if viewModel.isLoadingInitial {
@@ -87,15 +87,13 @@ private class PromoPreviewViewModel: PaywallViewModel {
     }
 }
 
-#Preview {
+#Preview("PaywallPromoView - Light") {
     PaywallPromoView(viewModel: PromoPreviewViewModel())
         .environment(\.colorScheme, .light)
-        .previewDisplayName("PaywallPromoView - Light")
 }
 
-#Preview {
+#Preview("PaywallPromoView - Dark") {
     PaywallPromoView(viewModel: PromoPreviewViewModel())
         .environment(\.colorScheme, .dark)
-        .previewDisplayName("PaywallPromoView - Dark")
 }
 #endif

@@ -2,13 +2,31 @@
   "sourceLanguage" : "en",
   "strings" : {
     "•" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "•"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "."
+          }
+        }
+      },
+      "shouldTranslate" : false
     },
-    "Error" : {
-
-    },
-    "OK" : {
-
+    "paywall_alert_dismiss" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        }
+      }
     },
     "paywall_benefit_premium_desc" : {
       "comment" : "Benefit: description for extra features",
@@ -17,6 +35,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Genießen Sie exklusive Tools, Inhalte und schnellere Updates."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enjoy exclusive tools, content, and faster updates."
           }
         },
         "es" : {
@@ -54,6 +78,12 @@
             "value" : "Alle Premium-Funktionen"
           }
         },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All Premium Features"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -87,6 +117,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Erhalten Sie schnelle Unterstützung von unserem Support-Team."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get fast help from our support team."
           }
         },
         "es" : {
@@ -124,6 +160,12 @@
             "value" : "Bevorzugter Support"
           }
         },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Priority Support"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -150,6 +192,16 @@
         }
       }
     },
+    "paywall_error_title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error"
+          }
+        }
+      }
+    },
     "paywall_privacy_title" : {
       "comment" : "Link to privacy policy",
       "localizations" : {
@@ -157,6 +209,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Datenschutzrichtlinie"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privacy Policy"
           }
         },
         "es" : {
@@ -194,6 +252,12 @@
             "value" : "Nur für kurze Zeit: Lebenslanger Zugang"
           }
         },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Limited Time: Lifetime Access"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -203,7 +267,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Offre limitée : Accès à vie"
+            "value" : "Offre limitée : Accès à vie"
           }
         },
         "pt-BR" : {
@@ -227,6 +291,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Käufe wiederherstellen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restore Purchases"
           }
         },
         "es" : {
@@ -264,6 +334,12 @@
             "value" : "Schalte unbegrenzte Funktionen frei und erlebe das Beste. Testen Sie Premium noch heute!"
           }
         },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unlock unlimited features and enjoy the best experience. Try Premium today!"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -299,6 +375,12 @@
             "value" : "Nutzungsbedingungen"
           }
         },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terms of Use"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -332,6 +414,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Premium werden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Go Premium"
           }
         },
         "es" : {

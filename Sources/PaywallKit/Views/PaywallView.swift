@@ -58,7 +58,7 @@ public struct PaywallView: View {
         }
         .background(Color(.systemBackground).ignoresSafeArea())
         .alert(isPresented: $viewModel.hasError) {
-            Alert(title: Text("Error"), message: Text(viewModel.errorMessage ?? ""), dismissButton: .default(Text("OK")))
+            Alert(title: Text("paywall_error_title"), message: Text(viewModel.errorMessage ?? ""), dismissButton: .default(Text("paywall_alert_dismiss")))
         }
         .overlay {
             if viewModel.isLoadingInitial {

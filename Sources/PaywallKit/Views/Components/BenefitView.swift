@@ -37,13 +37,12 @@ public struct BenefitView: View {
 }
 
 #if DEBUG
-#Preview {
+#Preview("BenefitView Preview") {
     BenefitView(benefit: Benefit(
         title: "paywall_benefit_premium_title",
         description: "paywall_benefit_premium_desc",
         iconName: "star.fill"
     ))
     .padding()
-    .previewDisplayName("BenefitView Preview")
 }
 #endif
