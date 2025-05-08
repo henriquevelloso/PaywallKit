@@ -33,8 +33,6 @@ public struct PaywallConfig {
         // Unlimited extension!
     ]
     @MainActor public static var revenueCatApiKey: String = ""
-    @MainActor public static var adaptyApiKey: String = "" // Para uso futuro
-    @MainActor public static var qonversionApiKey: String = "" // Para uso futuro
     @MainActor public static var productIdentifiers: [ProductID: String] = [:]
 
     /// Método de configuração opcional para definir todos os valores de uma vez.
@@ -47,8 +45,6 @@ public struct PaywallConfig {
         backgroundImagesPromo: [String]? = nil, // Tornar opcionais
         benefits: [Benefit]? = nil, // Tornar opcionais
         revenueCatApiKey: String = "",
-        adaptyApiKey: String = "",
-        qonversionApiKey: String = "",
         productIdentifiers: [ProductID: String]
     ) {
         self.paymentEngine = paymentEngine
@@ -57,8 +53,6 @@ public struct PaywallConfig {
         if let backgroundImagesPromo { self.backgroundImagesPromo = backgroundImagesPromo }
         if let benefits { self.benefits = benefits }
         self.revenueCatApiKey = revenueCatApiKey
-        self.adaptyApiKey = adaptyApiKey
-        self.qonversionApiKey = qonversionApiKey
         self.productIdentifiers = productIdentifiers
     }
 }
