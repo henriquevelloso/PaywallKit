@@ -1,13 +1,14 @@
 
 //
 //  ProductID.swift
+//  PaywallKit
 //
-//  Enum-based product identifiers.  
-//  Host app should extend this enum OR provide the raw values in PaywallConfig.
+//  Enum for product identifiers. Add new cases as needed.
 //
 
 import Foundation
 
+/// Enum-based Product Identifiers for StoreKit/RevenueCat
 public enum ProductID: String, CaseIterable {
     case weekly
     case weeklyTrial

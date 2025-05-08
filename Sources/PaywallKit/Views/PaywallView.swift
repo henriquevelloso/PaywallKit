@@ -1,61 +1,109 @@
 //
 //  PaywallView.swift
+//  PaywallKit
 //
-//  Layout for .full and .trial.
+//  Main view for the full-featured paywall with background carousel and all options.
 //
 
 import SwiftUI
-import StoreKit
 
 public struct PaywallView: View {
-    @StateObject private var viewModel = PaywallViewModel()
+    @StateObject var viewModel: PaywallViewModel
 
-    public init() {}
+    public init(viewModel: PaywallViewModel = .shared) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
 
     public var body: some View {
-        ZStack {
+        VStack(spacing: 0) {
+            // Background carousel
             PaywallCarouselView(images: PaywallConfig.backgroundImagesFull)
 
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 VStack(spacing: 24) {
-                    // Logo placeholder
-                    Image(systemName: "app.fill")
-                        .font(.largeTitle)
-
-                    Text(String(localized: "Get Pro"))
-                        .font(.title).bold()
-                    Text(String(localized: "Unlock the most powerful AI assistant"))
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-
-                    // Benefits
-                    ForEach(PaywallConfig.benefits, id: \.title) { BenefitView(benefit: $0) }
-
-                    // Product cards placeholder
-                    Text("(Product cards here)")
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(.thinMaterial)
-                        .clipShape(RoundedRectangle(cornerRadius: 16))
-
-                    PurchaseButton(
-                        product: viewModel.products.first,
-                        action: {
-                            // SAFETY: guard against missing product
-                            guard let product = viewModel.products.first else { return }
-                            Task { await viewModel.purchase(product) }
-                        },
-                        isLoading: .constant(viewModel.isLoading)
-                    )
-
-                    TermsPrivacyRestoreView {
-                        Task { await viewModel.restore() }
+                    VStack(spacing: 10) {
+                        Text(String(localized: "paywall_title"))
+                            .font(.largeTitle).bold()
+                        Text(String(localized: "paywall_subtitle"))
+                            .font(.title3)
+                            .multilineTextAlignment(.center)
+                            .foregroundColor(.secondary)
                     }
-                    .padding(.top, 8)
+                    // Benefits list
+                    ForEach(PaywallConfig.benefits, id: \.title) { benefit in
+                        BenefitView(benefit: benefit)
+                    }
+
+                    // Product Buttons
+                    VStack(alignment: .center, spacing: 12) {
+                        ForEach(viewModel.productDisplayOrder, id: \.self) { productId in
+                            PurchaseButton(
+                                title: viewModel.title(for: productId),
+                                isLoading: viewModel.isPurchasing && viewModel.selectedProductId == productId,
+                                isEnabled: !viewModel.isPurchasing,
+                                action: { viewModel.purchase(productId) }
+                            )
+                        }
+                    }
+
+                    // Restore/Terms
+                    TermsPrivacyRestoreView {
+                        viewModel.restorePurchases()
+                    }
                 }
-                .padding()
+                .padding(.horizontal, 26)
+                .padding(.vertical, 24)
+                .frame(maxWidth: .infinity)
             }
         }
-        .ignoresSafeArea(edges: .bottom)
+        .background(Color(.systemBackground).ignoresSafeArea())
+        .alert(isPresented: $viewModel.hasError) {
+            Alert(title: Text("Error"), message: Text(viewModel.errorMessage ?? ""), dismissButton: .default(Text("OK")))
+        }
+        .overlay {
+            if viewModel.isLoadingInitial {
+                Color.black.opacity(0.18).ignoresSafeArea()
+                ProgressView()
+                    .scaleEffect(1.3)
+            }
+        }
     }
 }
+
+#if DEBUG
+
+private protocol ProductDisplayable {
+    var displayName: String { get }
+    var displayPrice: String { get }
+}
+
+private struct MockProduct: ProductDisplayable {
+    let displayName: String
+    let displayPrice: String
+}
+
+private class PreviewViewModel: PaywallViewModel {
+    // Mocks simulando produtos vindos do StoreKit
+    let mockProducts: [ProductID: ProductDisplayable] = [
+        .weekly: MockProduct(displayName: "Weekly", displayPrice: "R$4,90"),
+        .annual: MockProduct(displayName: "Annual", displayPrice: "R$69,90"),
+        .lifetime: MockProduct(displayName: "Lifetime", displayPrice: "R$109,90")
+    ]
+
+    override var productDisplayOrder: [ProductID] { [.weekly, .annual, .lifetime] }
+    override func title(for productId: ProductID) -> String {
+        guard let p = mockProducts[productId] else { return "" }
+        return "\(p.displayName) • \(p.displayPrice)"
+    }
+}
+
+#Preview("PaywallView - StoreKit2 Preview") {
+    PaywallView(viewModel: PreviewViewModel())
+        .environment(\.colorScheme, .light)
+}
+
+#Preview("PaywallView - StoreKit2 Dark") {
+    PaywallView(viewModel: PreviewViewModel())
+        .environment(\.colorScheme, .dark)
+}
+#endif

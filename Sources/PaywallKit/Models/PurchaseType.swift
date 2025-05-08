@@ -1,13 +1,16 @@
 
 //
 //  PurchaseType.swift
+//  PaywallKit
+//
+//  Enum for selecting the global paywall type.
 //
 
 import Foundation
 
-/// Three global layout variants we support.
+/// Enum for paywall screen types
 public enum PurchaseType {
-    case full      // weekly / annual / lifetime
-    case trial     // weekly (3-day) / annual / lifetime
-    case promo     // lifetimePromo only
+    case full       // Complete paywall (all options)
+    case trial      // Emphasis on trial flow
+    case promo      // Promotional flow
 }

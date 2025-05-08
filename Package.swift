@@ -31,10 +31,6 @@ let package = Package(
             resources: [
                 .process("Resources")
             ]
-        ),
-        .testTarget(
-            name: "PaywallKitTests",
-            dependencies: ["PaywallKit"]
         )
     ]
 )

@@ -1,7 +1,116 @@
 {
-  "sourceLanguage" : "en",
-  "strings" : {
-
-  },
-  "version" : "1.0"
+  "version": "1.0",
+  "sourceLanguage": "en",
+  "strings": {
+    "paywall_title": {
+      "value": "Go Premium",
+      "comment": "Main paywall title",
+      "localizations": {
+        "de": { "stringUnit": { "state": "translated", "value": "Premium werden" } },
+        "es": { "stringUnit": { "state": "translated", "value": "Hazte Premium" } },
+        "fr": { "stringUnit": { "state": "translated", "value": "Passer à Premium" } },
+        "pt-BR": { "stringUnit": { "state": "translated", "value": "Seja Premium" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "升级为高级版" } }
+      }
+    },
+    "paywall_subtitle": {
+      "value": "Unlock unlimited features and get the best experience. Try Premium today!",
+      "comment": "Main paywall subtitle",
+      "localizations": {
+        "de": { "stringUnit": { "state": "translated", "value": "Schalte unbegrenzte Funktionen frei und erlebe das Beste. Testen Sie Premium noch heute!" } },
+        "es": { "stringUnit": { "state": "translated", "value": "Desbloquea funciones ilimitadas y disfruta de la mejor experiencia. ¡Prueba Premium hoy!" } },
+        "fr": { "stringUnit": { "state": "translated", "value": "Débloquez toutes les fonctionnalités et profitez de la meilleure expérience. Essayez Premium dès aujourd'hui !" } },
+        "pt-BR": { "stringUnit": { "state": "translated", "value": "Desbloqueie recursos ilimitados e tenha a melhor experiência. Experimente o Premium hoje!" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "解锁全部高级功能，获得最佳体验。立即试用高级版！" } }
+      }
+    },
+    "paywall_promo_title": {
+      "value": "Limited Time: Lifetime Access",
+      "comment": "Paywall promo variant title",
+      "localizations": {
+        "de": { "stringUnit": { "state": "translated", "value": "Nur für kurze Zeit: Lebenslanger Zugang" } },
+        "es": { "stringUnit": { "state": "translated", "value": "Por tiempo limitado: acceso de por vida" } },
+        "fr": { "stringUnit": { "state": "translated", "value": "Offre limitée : Accès à vie" } },
+        "pt-BR": { "stringUnit": { "state": "translated", "value": "Por tempo limitado: acesso vitalício" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "限时优惠：终身访问权" } }
+      }
+    },
+    "paywall_benefit_premium_title": {
+      "value": "All Premium Features",
+      "comment": "Benefit: title for extra features",
+      "localizations": {
+        "de": { "stringUnit": { "state": "translated", "value": "Alle Premium-Funktionen" } },
+        "es": { "stringUnit": { "state": "translated", "value": "Todas las funciones premium" } },
+        "fr": { "stringUnit": { "state": "translated", "value": "Toutes les fonctionnalités Premium" } },
+        "pt-BR": { "stringUnit": { "state": "translated", "value": "Todos os recursos Premium" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "全部高级功能" } }
+      }
+    },
+    "paywall_benefit_premium_desc": {
+      "value": "Enjoy exclusive tools, content, and faster updates.",
+      "comment": "Benefit: description for extra features",
+      "localizations": {
+        "de": { "stringUnit": { "state": "translated", "value": "Genießen Sie exklusive Tools, Inhalte und schnellere Updates." } },
+        "es": { "stringUnit": { "state": "translated", "value": "Disfruta de herramientas, contenido exclusivos y actualizaciones más rápidas." } },
+        "fr": { "stringUnit": { "state": "translated", "value": "Profitez d'outils exclusifs, de contenus et de mises à jour plus rapides." } },
+        "pt-BR": { "stringUnit": { "state": "translated", "value": "Aproveite ferramentas, conteúdos exclusivos e atualizações mais rápidas." } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "专享工具、内容与更快的更新。" } }
+      }
+    },
+    "paywall_benefit_priority_title": {
+      "value": "Priority Support",
+      "comment": "Benefit: support title",
+      "localizations": {
+        "de": { "stringUnit": { "state": "translated", "value": "Bevorzugter Support" } },
+        "es": { "stringUnit": { "state": "translated", "value": "Soporte prioritario" } },
+        "fr": { "stringUnit": { "state": "translated", "value": "Assistance prioritaire" } },
+        "pt-BR": { "stringUnit": { "state": "translated", "value": "Suporte prioritário" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "优先支持" } }
+      }
+    },
+    "paywall_benefit_priority_desc": {
+      "value": "Receive fast help from our support team.",
+      "comment": "Benefit: support description",
+      "localizations": {
+        "de": { "stringUnit": { "state": "translated", "value": "Erhalten Sie schnelle Unterstützung von unserem Support-Team." } },
+        "es": { "stringUnit": { "state": "translated", "value": "Recibe ayuda rápida de nuestro equipo de soporte." } },
+        "fr": { "stringUnit": { "state": "translated", "value": "Recevez rapidement de l'aide de notre équipe d'assistance." } },
+        "pt-BR": { "stringUnit": { "state": "translated", "value": "Receba atendimento rápido da nossa equipe de suporte." } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "享受我们客服团队的快速帮助。" } }
+      }
+    },
+    "paywall_restore_button": {
+      "value": "Restore Purchases",
+      "comment": "Button for restoring purchases",
+      "localizations": {
+        "de": { "stringUnit": { "state": "translated", "value": "Käufe wiederherstellen" } },
+        "es": { "stringUnit": { "state": "translated", "value": "Restaurar compras" } },
+        "fr": { "stringUnit": { "state": "translated", "value": "Restaurer les achats" } },
+        "pt-BR": { "stringUnit": { "state": "translated", "value": "Restaurar compras" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "恢复购买" } }
+      }
+    },
+    "paywall_terms_title": {
+      "value": "Terms of Service",
+      "comment": "Link to terms and conditions",
+      "localizations": {
+        "de": { "stringUnit": { "state": "translated", "value": "Nutzungsbedingungen" } },
+        "es": { "stringUnit": { "state": "translated", "value": "Términos de uso" } },
+        "fr": { "stringUnit": { "state": "translated", "value": "Conditions d'utilisation" } },
+        "pt-BR": { "stringUnit": { "state": "translated", "value": "Termos de Uso" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "使用条款" } }
+      }
+    },
+    "paywall_privacy_title": {
+      "value": "Privacy Policy",
+      "comment": "Link to privacy policy",
+      "localizations": {
+        "de": { "stringUnit": { "state": "translated", "value": "Datenschutzrichtlinie" } },
+        "es": { "stringUnit": { "state": "translated", "value": "Política de privacidad" } },
+        "fr": { "stringUnit": { "state": "translated", "value": "Politique de confidentialité" } },
+        "pt-BR": { "stringUnit": { "state": "translated", "value": "Política de Privacidade" } },
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "隐私政策" } }
+      }
+    }
+  }
 }

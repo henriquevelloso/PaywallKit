@@ -1,41 +1,101 @@
 //
 //  PaywallPromoView.swift
+//  PaywallKit
 //
-//  Layout for .promo (lifetimePromo only).
+//  Promotional view with distinct background and single offer emphasis.
 //
 
 import SwiftUI
-import StoreKit
 
 public struct PaywallPromoView: View {
-    @StateObject private var viewModel = PaywallViewModel()
+    @StateObject var viewModel: PaywallViewModel
 
-    public init() {}
+    public init(viewModel: PaywallViewModel = .shared) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
 
     public var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: 0) {
             PaywallCarouselView(images: PaywallConfig.backgroundImagesPromo)
-                .frame(height: 240)
+                .frame(height: 180)
 
-            VStack(spacing: 12) {
-                Text(String(localized: "Special Lifetime Offer"))
-                    .font(.title2).bold()
-                Text(String(localized: "Pay once, use forever. Limited time."))
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 16) {
+                    Text(String(localized: "paywall_promo_title"))
+                        .font(.largeTitle.bold())
+                        .padding(.bottom, 4)
+
+                    ForEach(PaywallConfig.benefits, id: \.title) { benefit in
+                        BenefitView(benefit: benefit)
+                    }
+
+                    if let promoProduct = viewModel.productDisplayOrder.first {
+                        PurchaseButton(
+                            title: viewModel.title(for: promoProduct),
+                            isLoading: viewModel.isPurchasing && viewModel.selectedProductId == promoProduct,
+                            isEnabled: !viewModel.isPurchasing,
+                            action: { viewModel.purchase(promoProduct) }
+                        )
+                        .padding(.vertical, 18)
+                    }
+
+                    TermsPrivacyRestoreView {
+                        viewModel.restorePurchases()
+                    }
+                }
+                .padding(.horizontal, 26)
+                .padding(.vertical, 22)
+                .frame(maxWidth: .infinity)
             }
-
-            Spacer()
-
-            PurchaseButton(product: viewModel.products.first,
-                           action: { Task { await viewModel.purchase(viewModel.products.first!) } },
-                           isLoading: .constant(viewModel.isLoading))
-                .padding(.horizontal)
-
-            TermsPrivacyRestoreView {
-                Task { await viewModel.restore() }
+        }
+        .background(Color(.systemBackground).ignoresSafeArea())
+        .alert(isPresented: $viewModel.hasError) {
+            Alert(title: Text("Error"), message: Text(viewModel.errorMessage ?? ""), dismissButton: .default(Text("OK")))
+        }
+        .overlay {
+            if viewModel.isLoadingInitial {
+                Color.black.opacity(0.18).ignoresSafeArea()
+                ProgressView()
+                    .scaleEffect(1.2)
             }
-            .padding(.bottom, 12)
         }
     }
 }
+
+// MARK: - Preview
+
+#if DEBUG
+private protocol ProductDisplayable {
+    var displayName: String { get }
+    var displayPrice: String { get }
+}
+
+private struct MockProduct: ProductDisplayable {
+    let displayName: String
+    let displayPrice: String
+}
+
+private class PromoPreviewViewModel: PaywallViewModel {
+    let mockProducts: [ProductID: ProductDisplayable] = [
+        .lifetimePromo: MockProduct(displayName: "Lifetime Promo", displayPrice: "R$59,90"),
+    ]
+
+    override var productDisplayOrder: [ProductID] { [.lifetimePromo] }
+    override func title(for productId: ProductID) -> String {
+        guard let p = mockProducts[productId] else { return "" }
+        return "\(p.displayName) • \(p.displayPrice)"
+    }
+}
+
+#Preview {
+    PaywallPromoView(viewModel: PromoPreviewViewModel())
+        .environment(\.colorScheme, .light)
+        .previewDisplayName("PaywallPromoView - Light")
+}
+
+#Preview {
+    PaywallPromoView(viewModel: PromoPreviewViewModel())
+        .environment(\.colorScheme, .dark)
+        .previewDisplayName("PaywallPromoView - Dark")
+}
+#endif
