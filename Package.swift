@@ -17,7 +17,7 @@ let package = Package(
     ],
     dependencies: [
         // RevenueCat via SPM
-        .package(url: "https://github.com/RevenueCat/purchases-ios-spm.git", from: "4.0.0")
+        .package(url: "https://github.com/RevenueCat/purchases-ios-spm.git", from: "5.23.0")
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite
